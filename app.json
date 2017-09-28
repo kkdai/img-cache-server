@@ -1,0 +1,18 @@
+{
+  "name": "image cache WebServer in Golang",
+  "description": "A rss provider for specific service in Golang",
+  "repository": "https://github.com/kkdai/rss-webserver",
+  "keywords": [
+    "rss",
+    "go",
+    "static"
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/kr/heroku-buildpack-go.git"
+    },
+    {
+      "url": "heroku/go"
+    }
+  ]
+}
