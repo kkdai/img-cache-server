@@ -1,1 +1,1 @@
-web: img-cacher-server
+web: rss-webserver
