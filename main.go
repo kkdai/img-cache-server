@@ -19,6 +19,7 @@ import (
 
 func main() {
 	//Make a forever channel which not exist for now
+	tempImg = make(map[int64][]byte)
 	forever := make(chan bool)
 	port := os.Getenv("PORT")
 	log.Println("-----Server Start in port=", port, " -----")

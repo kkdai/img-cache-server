@@ -13,6 +13,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -20,6 +21,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -27,14 +29,24 @@ import (
 var tempImg map[int64][]byte
 
 func imgDownload(w http.ResponseWriter, r *http.Request) {
-	id := strings.Trim(r.RequestURI, "/imgs")
-	id = strings.Trim(id, "?")
-	io.WriteString(w, "")
+	id := strings.Trim(r.RequestURI, "/imgs?")
+	w.Header().Set("Content-Type", "image/jpeg")
+
+	i, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return
+	}
+	if v, ok := tempImg[i]; ok {
+		io.WriteString(w, string(v))
+	}
+	io.WriteString(w, "No data")
 }
 
 func urlGet(w http.ResponseWriter, r *http.Request) {
 	escapeUrl := strings.Trim(r.RequestURI, "/url?")
 	rawUrl, err := url.QueryUnescape(escapeUrl)
+	log.Println("Get url:", rawUrl)
+
 	if err != nil {
 		log.Println("url err:", err)
 	}
@@ -45,7 +57,9 @@ func urlGet(w http.ResponseWriter, r *http.Request) {
 	}
 	defer response.Body.Close()
 
-	if strings.EqualFold(response.Header.Get("Content-Type"), "image/jpeg") {
+	log.Println("Get content type:", response.Header.Get("Content-Type"), "---")
+
+	if strings.EqualFold(response.Header.Get("Content-Type"), " image/jpeg ") {
 		log.Println("Not image URL:", response.Header.Get("Content-Type"))
 		io.WriteString(w, "Not image URL")
 		return
@@ -58,15 +72,19 @@ func urlGet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	checkInt64 := time.Now().Unix()
-	if _, ok := tempImg[checkInt64]; !ok {
+	if _, ok := tempImg[checkInt64]; ok {
 		checkInt64 = time.Now().Unix()
 		log.Println("Coflict, do again...")
 	}
 
 	tempImg[checkInt64] = totalBody
 
-	//QueryEscape(s string) string
-	io.WriteString(w, "ret")
+	str := strconv.FormatInt(checkInt64, 10)
+
+	// if err := writeFile(totalBody, "/tmp/test1.jpg"); err != nil {
+	// 	return
+	// }
+	io.WriteString(w, str)
 }
 
 func serveHttpAPI(port string, existC chan bool) {
@@ -81,4 +99,19 @@ func serveHttpAPI(port string, existC chan bool) {
 	mux.HandleFunc("/imgs", imgDownload)
 	mux.HandleFunc("/url", urlGet)
 	http.ListenAndServe(":"+port, mux)
+}
+
+func writeFile(data []byte, filePath string) error {
+	f, err := os.Create("/tmp/dat2.jpg")
+	if err != nil {
+		return err
+	}
+	w := bufio.NewWriter(f)
+	_, err = w.WriteString(string(data))
+	if err != nil {
+		return err
+	}
+
+	defer f.Close()
+	return nil
 }
