@@ -29,11 +29,13 @@ import (
 var tempImg map[int64][]byte
 
 func imgDownload(w http.ResponseWriter, r *http.Request) {
-	id := strings.Trim(r.RequestURI, "/imgs?")
+	idStr := strings.Trim(r.RequestURI, "/imgs?")
+	id := strings.TrimRight(idStr, ".jpg")
 	w.Header().Set("Content-Type", "image/jpeg")
 
 	i, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
+		log.Println("input not a number for id:", id)
 		return
 	}
 	if v, ok := tempImg[i]; ok {
@@ -50,14 +52,14 @@ func urlGet(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("url err:", err)
 	}
+
 	response, err := http.Get(rawUrl)
+	defer response.Body.Close()
+
 	if err != nil {
 		log.Println("Error while downloading", rawUrl, "-", err)
 		return
 	}
-	defer response.Body.Close()
-
-	log.Println("Get content type:", response.Header.Get("Content-Type"), "---")
 
 	if strings.EqualFold(response.Header.Get("Content-Type"), " image/jpeg ") {
 		log.Println("Not image URL:", response.Header.Get("Content-Type"))

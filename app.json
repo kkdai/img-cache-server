@@ -1,7 +1,7 @@
 {
   "name": "image cache WebServer in Golang",
   "description": "A rss provider for specific service in Golang",
-  "repository": "https://github.com/kkdai/rss-webserver",
+  "repository": "https://github.com/kkdai/imgCacherServer",
   "keywords": [
     "rss",
     "go",
