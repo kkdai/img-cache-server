@@ -1,1 +1,1 @@
-web: imgCacherServer
+web: img-cacher-server
