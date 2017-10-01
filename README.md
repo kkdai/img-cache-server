@@ -8,6 +8,12 @@ img-cache-server: A web image trasfer to HTTPS link
 How to use it
 =============
 
+- "htts://YOU_ADD/url? + `Your_Http_Img_Address`": Return a id of image cache.  (Img_Cache_ID)
+- "htts://YOU_ADD/img? + `Img_Cache_ID`.jpg": Cache image content.
+
+So you can easily to cache any HTTP image and forward to HTTPS if you hosted on Heroko.
+
+Enjoy it.
 
 Installation and Usage
 =============
