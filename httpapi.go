@@ -28,6 +28,33 @@ import (
 
 var tempImg map[int64][]byte
 
+func imgOnfly(w http.ResponseWriter, r *http.Request) {
+	escapeUrl := strings.Trim(r.RequestURI, "/go?")
+	w.Header().Set("Content-Type", "image/jpeg")
+
+	rawUrl, err := url.QueryUnescape(escapeUrl)
+	log.Println("Get url:", rawUrl)
+
+	if err != nil {
+		log.Println("url err:", err)
+	}
+
+	response, err := http.Get(rawUrl)
+	if err != nil {
+		log.Println("Error while downloading", rawUrl, "-", err)
+		return
+	}
+	defer response.Body.Close()
+
+	totalBody, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		fmt.Println("Error while downloading", rawUrl, "-", err)
+		return
+	}
+
+	io.WriteString(w, string(totalBody))
+}
+
 func imgDownload(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.Trim(r.RequestURI, "/imgs?")
 	id := strings.TrimRight(idStr, ".jpg")
@@ -98,6 +125,7 @@ func serveHttpAPI(port string, existC chan bool) {
 	}()
 
 	mux := http.NewServeMux()
+	mux.HandleFunc("/go", imgOnfly)
 	mux.HandleFunc("/imgs", imgDownload)
 	mux.HandleFunc("/url", urlGet)
 	http.ListenAndServe(":"+port, mux)

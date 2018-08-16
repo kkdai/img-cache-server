@@ -10,6 +10,7 @@ How to use it
 
 - "https://YOUR_ADDR/url? + `Your_Http_Img_Address`": Return a id of image cache.  (Img_Cache_ID)
 - "https://YOUR_ADDR/img? + `Img_Cache_ID`.jpg": Cache image content.
+- "https://YOUR_ADDR/go? + `Your_Http_Img_Address`": Provide https image on-fly, it may take a while if your image size is large.
 
 So you can easily to cache any HTTP image and forward to HTTPS if you hosted on Heroko.
 
