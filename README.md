@@ -21,7 +21,11 @@ Installation and Usage
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-  
+
+Inspired by
+---------------
+
+- [imgproxy](https://evilmartians.com/chronicles/introducing-imgproxy)
 
 License
 ---------------
