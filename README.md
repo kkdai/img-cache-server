@@ -23,6 +23,40 @@ Installation and Usage
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 
+Sample code how to use this server.
+
+```
+var ImgSrv string = "YOUR_DEPLOY_ADDRESS"
+
+
+func getSecureImageAddress(oriAdd string) string {
+	eURL := url.QueryEscape(oriAdd)
+	imgGetUrl := fmt.Sprintf("%surl?%s", ImgSrv, eURL)
+	log.Println("eURL:", eURL, " url:", imgGetUrl, " ImgApi:", ImgSrv)
+
+	response, err := http.Get(imgGetUrl)
+	if err != nil {
+		log.Println("Error while downloading:", err)
+		return ""
+	}
+	defer response.Body.Close()
+
+	if response.StatusCode != 200 {
+		return ""
+	}
+
+	totalBody, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Println("Error while parsing:", err)
+		return ""
+	}
+	log.Println("Got data:", string(totalBody))
+	return fmt.Sprintf("%simgs?%s.jpg", ImgSrv, string(totalBody))
+
+}
+```
+
+
 Inspired by
 ---------------
 
