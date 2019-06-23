@@ -13,7 +13,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -109,10 +108,6 @@ func urlGet(w http.ResponseWriter, r *http.Request) {
 	tempImg[checkInt64] = totalBody
 
 	str := strconv.FormatInt(checkInt64, 10)
-
-	// if err := writeFile(totalBody, "/tmp/test1.jpg"); err != nil {
-	// 	return
-	// }
 	io.WriteString(w, str)
 }
 
@@ -129,19 +124,4 @@ func serveHttpAPI(port string, existC chan bool) {
 	mux.HandleFunc("/imgs", imgDownload)
 	mux.HandleFunc("/url", urlGet)
 	http.ListenAndServe(":"+port, mux)
-}
-
-func writeFile(data []byte, filePath string) error {
-	f, err := os.Create("/tmp/dat2.jpg")
-	if err != nil {
-		return err
-	}
-	w := bufio.NewWriter(f)
-	_, err = w.WriteString(string(data))
-	if err != nil {
-		return err
-	}
-
-	defer f.Close()
-	return nil
 }
