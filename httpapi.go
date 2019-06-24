@@ -99,9 +99,9 @@ func urlGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	checkInt64 := time.Now().Unix()
+	checkInt64 := time.Now().UnixNano()
 	if _, ok := tempImg[checkInt64]; ok {
-		checkInt64 = time.Now().Unix()
+		checkInt64 = time.Now().UnixNano()
 		log.Println("Coflict, do again...")
 	}
 
