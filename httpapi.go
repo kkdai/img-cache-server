@@ -102,7 +102,7 @@ func urlGet(w http.ResponseWriter, r *http.Request) {
 	checkInt64 := time.Now().UnixNano()
 	if _, ok := tempImg[checkInt64]; ok {
 		checkInt64 = time.Now().UnixNano()
-		log.Println("Coflict, do again...")
+		log.Println("Coflict, do replace...")
 	}
 
 	tempImg[checkInt64] = totalBody
