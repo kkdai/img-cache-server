@@ -71,15 +71,15 @@ func imgDownload(w http.ResponseWriter, r *http.Request) {
 
 func urlGet(w http.ResponseWriter, r *http.Request) {
 	escapeURL := strings.Trim(r.RequestURI, "/url?")
-	rawUrl, err := url.QueryUnescape(escapeURL)
-	log.Println("Get url:", rawUrl)
+	rawURL, err := url.QueryUnescape(escapeURL)
+	log.Println("Get url:", rawURL)
 
 	if err != nil {
 		log.Println("url input err:", err)
 		return
 	}
 
-	retID, err := GetImgCache(rawUrl)
+	retID, err := GetImgCache(rawURL)
 	if err != nil {
 		log.Println("Error on GetImgCache", err)
 		return
@@ -88,7 +88,7 @@ func urlGet(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, retID)
 }
 
-func serveHttpAPI(port string, existC chan bool) {
+func serveHTTPAPI(port string, existC chan bool) {
 	go func() {
 		if err, ok := <-existC; ok {
 			log.Fatal(err)
