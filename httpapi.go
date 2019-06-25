@@ -22,7 +22,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 )
 
 var tempImg map[int64][]byte
@@ -71,44 +70,22 @@ func imgDownload(w http.ResponseWriter, r *http.Request) {
 }
 
 func urlGet(w http.ResponseWriter, r *http.Request) {
-	escapeUrl := strings.Trim(r.RequestURI, "/url?")
-	rawUrl, err := url.QueryUnescape(escapeUrl)
+	escapeURL := strings.Trim(r.RequestURI, "/url?")
+	rawUrl, err := url.QueryUnescape(escapeURL)
 	log.Println("Get url:", rawUrl)
 
 	if err != nil {
-		log.Println("url err:", err)
+		log.Println("url input err:", err)
+		return
 	}
 
-	response, err := http.Get(rawUrl)
-	defer response.Body.Close()
-
+	retID, err := GetImgCache(rawUrl)
 	if err != nil {
-		log.Println("Error while downloading", rawUrl, "-", err)
+		log.Println("Error on GetImgCache", err)
 		return
 	}
 
-	if strings.EqualFold(response.Header.Get("Content-Type"), " image/jpeg ") {
-		log.Println("Not image URL:", response.Header.Get("Content-Type"))
-		io.WriteString(w, "Not image URL")
-		return
-	}
-
-	totalBody, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		fmt.Println("Error while downloading", rawUrl, "-", err)
-		return
-	}
-
-	checkInt64 := time.Now().UnixNano()
-	if _, ok := tempImg[checkInt64]; ok {
-		checkInt64 = time.Now().UnixNano()
-		log.Println("Coflict, do replace...")
-	}
-
-	tempImg[checkInt64] = totalBody
-
-	str := strconv.FormatInt(checkInt64, 10)
-	io.WriteString(w, str)
+	io.WriteString(w, retID)
 }
 
 func serveHttpAPI(port string, existC chan bool) {
