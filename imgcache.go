@@ -12,6 +12,14 @@ import (
 
 var ImgMap map[int64][]byte
 
+var spportType = []struct {
+	ImgType     string
+	ContentType string
+}{
+	{"JPG", " image/jpeg "},
+	{"PNG", " image/png "},
+}
+
 //GetImgCache : Get image cache image content map ID
 func GetImgCache(url string) (string, error) {
 	response, err := http.Get(url)
@@ -23,6 +31,11 @@ func GetImgCache(url string) (string, error) {
 
 	defer response.Body.Close()
 
+	// support := false
+	// for _, v := range spportType {
+
+	// }
+	log.Println("url:", url, " contains:", response.Header.Get("Content-Type"))
 	if strings.EqualFold(response.Header.Get("Content-Type"), " image/jpeg ") {
 		log.Println("Not image URL:", url)
 		return "", fmt.Errorf("Not image URL:%s", url)
