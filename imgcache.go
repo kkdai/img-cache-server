@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+var ImgMap map[int64][]byte
+
 //GetImgCache : Get image cache image content map ID
 func GetImgCache(url string) (string, error) {
 	response, err := http.Get(url)
@@ -33,11 +35,11 @@ func GetImgCache(url string) (string, error) {
 	}
 
 	checkInt64 := time.Now().UnixNano()
-	if _, ok := tempImg[checkInt64]; ok {
+	if _, ok := ImgMap[checkInt64]; ok {
 		checkInt64 = time.Now().UnixNano()
 		log.Println("Coflict, do replace...")
 	}
 
-	tempImg[checkInt64] = totalBody
+	ImgMap[checkInt64] = totalBody
 	return strconv.FormatInt(checkInt64, 10), nil
 }

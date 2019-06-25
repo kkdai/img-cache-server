@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	tempImg = make(map[int64][]byte)
+	ImgMap = make(map[int64][]byte)
 }
 func TestGetImgCache(t *testing.T) {
 
@@ -25,7 +25,7 @@ func TestGetImgCache(t *testing.T) {
 		if err != nil {
 			t.Errorf("GetImgCache strconv failed with %x", err)
 		}
-		if _, ok := tempImg[retMapID]; !ok {
+		if _, ok := ImgMap[retMapID]; !ok {
 			t.Errorf("GetImgCache map is not exist")
 		}
 	}

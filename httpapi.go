@@ -24,8 +24,6 @@ import (
 	"strings"
 )
 
-var tempImg map[int64][]byte
-
 func imgOnfly(w http.ResponseWriter, r *http.Request) {
 	escapeUrl := strings.Trim(r.RequestURI, "/go?")
 	w.Header().Set("Content-Type", "image/jpeg")
@@ -63,7 +61,7 @@ func imgDownload(w http.ResponseWriter, r *http.Request) {
 		log.Println("input not a number for id:", id)
 		return
 	}
-	if v, ok := tempImg[i]; ok {
+	if v, ok := ImgMap[i]; ok {
 		io.WriteString(w, string(v))
 	}
 	io.WriteString(w, "No data")
