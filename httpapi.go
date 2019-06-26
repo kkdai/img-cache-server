@@ -20,7 +20,6 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -53,18 +52,33 @@ func imgOnfly(w http.ResponseWriter, r *http.Request) {
 
 func imgDownload(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.Trim(r.RequestURI, "/imgs?")
-	id := strings.TrimRight(idStr, ".jpg")
-	w.Header().Set("Content-Type", "image/jpeg")
 
-	i, err := strconv.ParseInt(id, 10, 64)
+	ret, err := GetImageContent(idStr)
 	if err != nil {
-		log.Println("input not a number for id:", id)
-		return
+		io.WriteString(w, "No data")
 	}
-	if v, ok := ImgMap[i]; ok {
-		io.WriteString(w, string(v))
+	for _, v := range spportType {
+		if strings.EqualFold(ret.ImgType, v.ImgType) {
+			log.Println("Content-Type:", v.ContentType)
+			w.Header().Set("Content-Type", v.ContentType)
+			break
+		}
 	}
-	io.WriteString(w, "No data")
+
+	io.WriteString(w, string(ret.Content))
+
+	// id := strings.TrimRight(idStr, ".jpg")
+	// w.Header().Set("Content-Type", "image/jpeg")
+
+	// i, err := strconv.ParseInt(id, 10, 64)
+	// if err != nil {
+	// 	log.Println("input not a number for id:", id)
+	// 	return
+	// }
+	// if v, ok := ImgMap[i]; ok {
+	// 	io.WriteString(w, string(v))
+	// }
+	// io.WriteString(w, "No data")
 }
 
 func urlGet(w http.ResponseWriter, r *http.Request) {
