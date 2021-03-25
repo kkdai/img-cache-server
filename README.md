@@ -1,7 +1,7 @@
 img-cache-server: A web image trasfer to HTTPS link
 ==============
 
- [![GoDoc](https://godoc.org/github.com/kkdai/img-cache-server?status.svg)](https://godoc.org/github.com/kkdai/img-cache-server)  [![Build Status](https://travis-ci.org/kkdai/img-cache-server.svg?branch=master)](https://travis-ci.org/kkdai/img-cache-server)
+ [![GoDoc](https://godoc.org/github.com/kkdai/img-cache-server?status.svg)](https://godoc.org/github.com/kkdai/img-cache-server) 
 
 
 
