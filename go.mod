@@ -1,3 +1,3 @@
 module github.com/kkdai/img-cache-server
 
-go 1.16
+go 1.21

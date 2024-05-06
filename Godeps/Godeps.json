@@ -1,6 +1,0 @@
-{
-	"ImportPath": "github.com/kkdai/img-cache-server",
-	"GoVersion": "go1.9",
-	"GodepVersion": "v79",
-	"Deps": []
-}
